@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ITask } from './task.interface';
+import { Task } from './task.entity';
 
 @Injectable()
 export class TaskService {
@@ -21,9 +22,10 @@ export class TaskService {
     return task;
   }
 
-  createTask(task: ITask): ITask {
-    this.tasks.push(task);
-    return task;
+  createTask(task: string): ITask {
+    const newTask = new Task(task)
+    this.tasks.push(newTask);
+    return newTask;
   }
 
   deleteTask(id: string): { message: string } {

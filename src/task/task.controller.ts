@@ -6,36 +6,44 @@ import {
   Param,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ITask } from './task.interface';
 import { TaskService } from './task.service';
+import { CreateTaskDto, UpdateTaskDto } from './dto';
 
 @Controller('tasks')
 export class TaskController {
-  constructor(private testService: TaskService) {}
+  constructor(private taskService: TaskService) {}
 
   @Get()
   getTasks(): ITask[] {
-    return this.testService.getTasks();
+    return this.taskService.getTasks();
   }
 
   @Get(':id')
   getTaskbyId(@Param('id') id: string): ITask {
-    return this.testService.getTaskbyId(id);
+    return this.taskService.getTaskbyId(id);
   }
 
+  @UsePipes(new ValidationPipe())
   @Post()
-  createTask(@Body('task') task: string): ITask {
-    return this.testService.createTask(task);
+  createTask(@Body() task: CreateTaskDto): ITask {
+    return this.taskService.createTask(task);
   }
 
   @Delete(':id')
   deleteTask(@Param('id') id: string): { message: string } {
-    return this.testService.deleteTask(id);
+    return this.taskService.deleteTask(id);
   }
 
+  @UsePipes(new ValidationPipe())
   @Put(':id')
-  updateTask(@Param('id') id: string, @Body() updatedTask: ITask): ITask {
-    return this.testService.updateTask(id, updatedTask);
+  updateTask(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): ITask {
+    return this.taskService.updateTask(id, updateTaskDto);
   }
 }

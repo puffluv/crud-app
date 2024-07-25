@@ -7,7 +7,7 @@ export enum Status {
 }
 
 export interface ITask {
-  id: number;
+  id: string;
   task: string;
   status: Status;
   tags: string[];
